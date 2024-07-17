@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Images with Falcor</title>
+</head>
+<body>
+  <div id="food-images"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/falcor/2.3.2/falcor.all.min.js" referrerpolicy="no-referrer"></script>
+  <script>
+    const model = new falcor.Model({ source: new falcor.HttpDataSource('https://87ecf1ce-343f-4e2a-a015-7aa44b83a855-00-2h00grokq7l5e.picard.replit.dev/model.json') });
+
+    model.get(['images', { from: 1, to: 3 }, ['url', 'description']]).then(response => {
+      const images = response.json.images;
+      const container = document.getElementById('food-images');
+
+      Object.keys(images).forEach(id => {
+        const image = images[id];
+        const imgElement = document.createElement('img');
+        imgElement.src = image.url;
+        imgElement.alt = image.description;
+        imgElement.width = 200;
+
+        const descriptionElement = document.createElement('p');
+        descriptionElement.textContent = image.description;
+
+        container.appendChild(imgElement);
+        container.appendChild(descriptionElement);
+      });
+    });
+  </script>
+</body>
+</html>
