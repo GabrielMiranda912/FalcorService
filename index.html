@@ -2,31 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Food Images with Falcor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Komparte Ofertas</title>
+  <style>
+    .product-card {
+      border: 1px solid #ddd;
+      padding: 16px;
+      margin: 16px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .product-card img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/falcor/2.3.2/falcor.all.min.js" referrerpolicy="no-referrer"></script>
+<script>
 </head>
 <body>
-  <div id="food-images"></div>
+  <div id="product-list"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/falcor/2.3.2/falcor.all.min.js" referrerpolicy="no-referrer"></script>
   <script>
-    const model = new falcor.Model({ source: new falcor.HttpDataSource('https://87ecf1ce-343f-4e2a-a015-7aa44b83a855-00-2h00grokq7l5e.picard.replit.dev/model.json') });
+    document.addEventListener('DOMContentLoaded', function() {
+      // Crear modelo Falcor
+      const model = new falcor.Model({
+        source: new falcor.HttpDataSource('http://yourserver.com/model.json')
+      });
 
-    model.get(['images', { from: 1, to: 3 }, ['url', 'description']]).then(response => {
-      const images = response.json.images;
-      const container = document.getElementById('food-images');
+      // Obtener datos
+      model.get('products[0..9]["imagen", "nombre", "precio", "categoria", "subcategoria"]').then(response => {
+        const products = response.json.products;
+        const productList = document.getElementById('product-list');
 
-      Object.keys(images).forEach(id => {
-        const image = images[id];
-        const imgElement = document.createElement('img');
-        imgElement.src = image.url;
-        imgElement.alt = image.description;
-        imgElement.width = 200;
+        for (let key in products) {
+          if (products.hasOwnProperty(key)) {
+            const product = products[key];
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
 
-        const descriptionElement = document.createElement('p');
-        descriptionElement.textContent = image.description;
+            const img = document.createElement('img');
+            img.src = product.imagen;
+            img.alt = product.nombre;
 
-        container.appendChild(imgElement);
-        container.appendChild(descriptionElement);
+            const name = document.createElement('h3');
+            name.textContent = product.nombre;
+
+            const price = document.createElement('p');
+            price.textContent = `Precio: ${product.precio}`;
+
+            const category = document.createElement('p');
+            category.textContent = `Categoría: ${product.categoria}`;
+
+            const subcategory = document.createElement('p');
+            subcategory.textContent = `Subcategoría: ${product.subcategoria}`;
+
+            productCard.appendChild(img);
+            productCard.appendChild(name);
+            productCard.appendChild(price);
+            productCard.appendChild(category);
+            productCard.appendChild(subcategory);
+
+            productList.appendChild(productCard);
+          }
+        }
+      }).catch(error => {
+        console.error('Error fetching data:', error);
       });
     });
   </script>
