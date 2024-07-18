@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Komparte Ofertas</title>
   <style>
+    #product-list{
+        display: flex;
+        justify-content: center;
+        align-items: first baseline;
+    }
     .product-card {
       border: 1px solid #ddd;
       padding: 16px;
@@ -19,11 +24,9 @@
     }
   </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/falcor/2.3.2/falcor.all.min.js" referrerpolicy="no-referrer"></script>
-<script>
 </head>
 <body>
   <div id="product-list"></div>
-
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Crear modelo Falcor
