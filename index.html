@@ -35,12 +35,12 @@
   <div id="product-list"></div>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Crear modelo Falcor
+     
       const model = new falcor.Model({
         source: new falcor.HttpDataSource('https://87ecf1ce-343f-4e2a-a015-7aa44b83a855-00-2h00grokq7l5e.picard.replit.dev/model.json')
       });
 
-      // Obtener datos
+     
       model.get('products[0...20]["imagen", "nombre", "precio", "categoria", "subcategoria"]').then(response => {
         const products = response.json.products;
         const productList = document.getElementById('product-list');
