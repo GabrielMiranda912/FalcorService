@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Komparte Ofertas</title>
   <style>
-    #product-list{
-        display: flex;
-        justify-content: center;
-        align-items: first baseline;
+    #product-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     .product-card {
       border: 1px solid #ddd;
@@ -16,14 +16,20 @@
       margin: 16px;
       border-radius: 8px;
       text-align: center;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      /* esto es para tener 3 filas por columna/*
+      /* flex: 1 1 calc(33.333% - 40px); 
+      max-width: calc(33.333% - 40px); */
+      flex: 1 1 calc(20% - 40px); 
+      max-width: calc(20% - 40px);
+      box-sizing: border-box;
     }
     .product-card img {
       max-width: 100%;
       height: auto;
     }
   </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/falcor/2.3.2/falcor.all.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/falcor/2.3.2/falcor.all.min.js" referrerpolicy="no-referrer"></script>
 </head>
 <body>
   <div id="product-list"></div>
@@ -35,39 +41,41 @@
       });
 
       // Obtener datos
-      model.get('products[0..9]["imagen", "nombre", "precio", "categoria", "subcategoria"]').then(response => {
+      model.get('products[0...20]["imagen", "nombre", "precio", "categoria", "subcategoria"]').then(response => {
         const products = response.json.products;
         const productList = document.getElementById('product-list');
 
         for (let key in products) {
           if (products.hasOwnProperty(key)) {
             const product = products[key];
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card';
+            if (product.imagen && product.nombre && product.precio && product.categoria && product.subcategoria) {
+              const productCard = document.createElement('div');
+              productCard.className = 'product-card';
 
-            const img = document.createElement('img');
-            img.src = product.imagen;
-            img.alt = product.nombre;
+              const img = document.createElement('img');
+              img.src = product.imagen;
+              img.alt = product.nombre;
 
-            const name = document.createElement('h3');
-            name.textContent = product.nombre;
+              const name = document.createElement('h3');
+              name.textContent = product.nombre;
 
-            const price = document.createElement('p');
-            price.textContent = `Precio: ${product.precio}`;
+              const price = document.createElement('p');
+              price.textContent = `Precio: ${product.precio}`;
 
-            const category = document.createElement('p');
-            category.textContent = `Categoría: ${product.categoria}`;
+              const category = document.createElement('p');
+              category.textContent = `Categoría: ${product.categoria}`;
 
-            const subcategory = document.createElement('p');
-            subcategory.textContent = `Subcategoría: ${product.subcategoria}`;
+              const subcategory = document.createElement('p');
+              subcategory.textContent = `Subcategoría: ${product.subcategoria}`;
 
-            productCard.appendChild(img);
-            productCard.appendChild(name);
-            productCard.appendChild(price);
-            productCard.appendChild(category);
-            productCard.appendChild(subcategory);
+              productCard.appendChild(img);
+              productCard.appendChild(name);
+              productCard.appendChild(price);
+              productCard.appendChild(category);
+              productCard.appendChild(subcategory);
 
-            productList.appendChild(productCard);
+              productList.appendChild(productCard);
+            }
           }
         }
       }).catch(error => {
